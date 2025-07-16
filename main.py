@@ -79,7 +79,7 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Display: " + DisplayCurrent
     elif text == "/reset":
         reply = "Module reset!"
-        sys.exit()
+#        sys.exit()
     elif text == "/otaupdate":
         reply = "Checking for update!"
         ota_updater = OTAUpdater(firmware_url, "main.py")
@@ -207,3 +207,5 @@ asyncio.create_task(ReadFifoSM())
 loop = asyncio.get_event_loop()
 #led.toggle()
 loop.run_forever()
+
+
