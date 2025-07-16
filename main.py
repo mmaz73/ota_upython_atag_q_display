@@ -3,7 +3,8 @@
 # 
 
 ### Config your stuff here
-Token =  "5124186275:AAEg_pmPNABkSRp2cYu7tGSZdmaJaxOs2HU"
+from WIFI_CONFIG import TelegramToken
+Token = TelegramToken
 
 import uasyncio as asyncio
 from telegram import TelegramBot
