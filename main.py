@@ -4,10 +4,16 @@
 
 ### Config your stuff here
 from WIFI_CONFIG import TelegramToken
+
 Token = TelegramToken
+
+firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
+
+###
 
 import uasyncio as asyncio
 from telegram import TelegramBot
+from ota import OTAUpdater
 
 import time
 from machine import Pin, PWM
@@ -70,6 +76,11 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Local IP: " + str(WlanIp)
     elif text == "/display":
         reply = "ATAG Q15S Display: " + DisplayCurrent
+    elif text == "/otaupdate":
+        reply = "Checking for update!"
+        ota_updater = OTAUpdater(firmware_url, "main.py")
+        
+        ota_updater.download_and_install_update_if_available()
     else:
         reply = "ATAG Q15S Display: " + DisplayCurrent
     
