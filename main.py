@@ -15,6 +15,7 @@ import uasyncio as asyncio
 from telegram import TelegramBot
 from ota import OTAUpdater
 
+import sys
 import time
 from machine import Pin, PWM
 import rp2
@@ -76,6 +77,9 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Local IP: " + str(WlanIp)
     elif text == "/display":
         reply = "ATAG Q15S Display: " + DisplayCurrent
+    elif text == "/reset":
+        reply = "Module reset!"
+        sys.exit()
     elif text == "/otaupdate":
         reply = "Checking for update!"
         ota_updater = OTAUpdater(firmware_url, "main.py")
