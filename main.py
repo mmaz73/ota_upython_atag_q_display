@@ -5,10 +5,6 @@
 ### Config your stuff here
 Token =  "5124186275:AAEg_pmPNABkSRp2cYu7tGSZdmaJaxOs2HU"
 
-#WifiNetwork = "u-Guest"
-#WifiPassword = "GqpZvmK8@r5yL#AP"
-###
-
 import uasyncio as asyncio
 from telegram import TelegramBot
 
