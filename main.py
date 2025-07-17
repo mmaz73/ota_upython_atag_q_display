@@ -80,6 +80,7 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Display: " + DisplayCurrent
     elif text == "/livedisplay":
         LiveDisplay = not LiveDisplay
+        reply = "ATAG Q15S LiveDisplay: " + str(LiveDisplay)
     elif text == "/reset":
         reply = "Module reset!"
 #        sys.exit()
@@ -207,5 +208,6 @@ asyncio.create_task(bot.run())
 asyncio.create_task(ReadFifoSM())
 loop = asyncio.get_event_loop()
 loop.run_forever()
+
 
 
