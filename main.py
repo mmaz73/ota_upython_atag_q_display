@@ -29,7 +29,7 @@ SAA1064 = 0x70
 
 DisplayCurrent = "P 19"
 LiveDisplay = False
-Chat_id = ""
+Chat_id = None
 LastTemperature = "NA"
 WlanIp = "0.0.0.0"
 
