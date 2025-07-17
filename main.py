@@ -192,7 +192,7 @@ async def ReadFifoSM():
                      reply = "ATAG Q15S Display: " + DisplayCurrent
                      bot.send(Chat_id,reply)
                else:
-                  await asyncio.sleep(0.002)
+                  await asyncio.sleep(0.001)
                if SevenSegDig.get(Digit0,"X") != "P":
                   LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
      else:
