@@ -28,6 +28,8 @@ EV1_PIN = Pin(19, Pin.OUT)
 SAA1064 = 0x70
 
 DisplayCurrent = "P 19"
+LiveDisplay = False
+Chat_id = ""
 LastTemperature = "NA"
 WlanIp = "0.0.0.0"
 
@@ -66,8 +68,9 @@ SevenSegDig = {
 }
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global LastTemperature, DisplayCurrent
+    global LastTemperature, DisplayCurrent, LiveDisplay, Chat_id
     print(msg_type,chat_name,sender_name,chat_id,text)
+    Chat_id = chat_id
 
     if text == "/temp":
         reply = "ATAG Q15S Temperature: " + LastTemperature
@@ -75,6 +78,8 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Local IP: " + str(WlanIp)
     elif text == "/display":
         reply = "ATAG Q15S Display: " + DisplayCurrent
+    elif text == "/livedisplay":
+        LiveDisplay = not LiveDisplay
     elif text == "/reset":
         reply = "Module reset!"
 #        sys.exit()
@@ -148,7 +153,7 @@ sm3.active(1)
 ############################
     
 async def ReadFifoSM():
-  global Repeat, State, LastTemperature, DisplayCurrent
+  global Repeat, State, LastTemperature, DisplayCurrent, Chat_id
 
   while True:
      if sm3.rx_fifo()>0:
@@ -176,7 +181,13 @@ async def ReadFifoSM():
         elif  State == "D4":
                State = "Idle"
                Digit3 = data & 0x7F
-               DisplayCurrent = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
+               DisplayNew = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
+               if DisplayNew != DisplayCurrent:
+                  DisplayCurrent = DisplayNew
+                  if LiveDisplay == True:
+                     reply = "ATAG Q15S Display: " + DisplayCurrent
+                     bot.send(Chat_id,reply)
+          
                if SevenSegDig.get(Digit0,"X") != "P":
                   LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
                await asyncio.sleep(0.01)
