@@ -21,8 +21,6 @@ from machine import Pin, PWM
 import rp2
 from rp2 import PIO
 
-led = Pin("LED", Pin.OUT)
-
 SDA_PIN = Pin(16, Pin.IN)
 SCL_PIN = Pin(17, Pin.IN)
 EV0_PIN = Pin(18, Pin.OUT)
@@ -90,8 +88,6 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     
     bot.send(chat_id,reply)
 
-print("Starting Telegram sniff I2C")
-
 @rp2.asm_pio(set_init=(rp2.PIO.OUT_HIGH,rp2.PIO.OUT_HIGH))
 
 def i2c_start():
@@ -101,7 +97,6 @@ def i2c_start():
     jmp("5")                              # 2
     label("3")
     set(pins, 1)                          # 3
-#    irq(rel(0))                          # 3.1
     irq(block, 7)                          # 4
     label("5")
     wait(1, gpio, 16)                     # 5
@@ -135,7 +130,6 @@ def i2c_main():
     jmp("0")                              # 3
     label("4")                            # Start or Stop
     mov(isr, pins)                        # 4
-#    in_(null, 9)                          # 5
     wrap()
 
 # Instantiate StateMachine(0) with wait_sda_low program on Pin(16).
@@ -150,11 +144,6 @@ sm3 = rp2.StateMachine(3, i2c_main, in_base=SDA_PIN, jmp_pin=EV0_PIN,)
 sm0.active(1)
 sm2.active(1)
 sm3.active(1)
-
-#Idle
-#SDA_PIN.on()
-#SCL_PIN.on()
-
 
 ############################
     
@@ -194,18 +183,18 @@ async def ReadFifoSM():
      else:
        await asyncio.sleep(0.001)
 ############################
+# Main program
+############################
+
+print("Starting Telegram sniff I2C")
 
 # Set initial State
 State = "Idle"
 
-#led.toggle()
-
 bot = TelegramBot(Token,mycallback)
-#WlanIp = bot.connect_wifi(WifiNetwork, WifiPassword)
 asyncio.create_task(bot.run())
 asyncio.create_task(ReadFifoSM())
 loop = asyncio.get_event_loop()
-#led.toggle()
 loop.run_forever()
 
 
