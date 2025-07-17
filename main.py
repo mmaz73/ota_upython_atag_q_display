@@ -184,7 +184,7 @@ async def ReadFifoSM():
                DisplayNew = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
                if DisplayNew != DisplayCurrent:
                   DisplayCurrent = DisplayNew
-                  if LiveDisplay == True:
+                  if (LiveDisplay == True) and (Chat_id != None):
                      reply = "ATAG Q15S Display: " + DisplayCurrent
                      bot.send(Chat_id,reply)
           
