@@ -78,9 +78,12 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = "ATAG Q15S Local IP: " + str(WlanIp)
     elif text == "/display":
         reply = "ATAG Q15S Display: " + DisplayCurrent
-    elif text == "/livedisplay":
-        LiveDisplay = not LiveDisplay
-        reply = "ATAG Q15S LiveDisplay: " + str(LiveDisplay)
+    elif text == "/livedisplayon":
+        LiveDisplay = True
+        reply = "ATAG Q15S LiveDisplayOn"
+    elif text == "/livedisplayoff":
+        LiveDisplay = False
+        reply = "ATAG Q15S LiveDisplayOff"
     elif text == "/reset":
         reply = "Module reset!"
 #        sys.exit()
@@ -188,10 +191,10 @@ async def ReadFifoSM():
                   if (LiveDisplay == True) and (Chat_id != None):
                      reply = "ATAG Q15S Display: " + DisplayCurrent
                      bot.send(Chat_id,reply)
-          
+               else:
+                  await asyncio.sleep(0.01)
                if SevenSegDig.get(Digit0,"X") != "P":
                   LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
-               await asyncio.sleep(0.01)
      else:
        await asyncio.sleep(0.001)
 ############################
