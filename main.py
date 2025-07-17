@@ -153,7 +153,7 @@ sm3.active(1)
 ############################
     
 async def ReadFifoSM():
-  global Repeat, State, LastTemperature, DisplayCurrent, Chat_id
+  global Repeat, State, LastTemperature, DisplayCurrent, Chat_id, LiveDisplay
 
   while True:
      if sm3.rx_fifo()>0:
