@@ -201,7 +201,7 @@ async def LiveDisplay():
      if (LiveDisplayOn == True) and (Chat_id != None):
         reply = Msg_prefix + "Display: " + DisplayOld
         bot.send(Chat_id,reply)
-  await asyncio.sleep(0.1)
+  await asyncio.sleep(0.2)
 
 ############################
 # Main program
@@ -213,8 +213,11 @@ print("Starting Telegram sniff I2C")
 State = "Idle"
 
 bot = TelegramBot(Token,mycallback)
+
 asyncio.create_task(bot.run())
 asyncio.create_task(ReadFifoSM())
+asyncio.create_task(LiveDisplay())
+
 loop = asyncio.get_event_loop()
 loop.run_forever()
 
