@@ -4,7 +4,7 @@
 
 ### Config your stuff here
 from WIFI_CONFIG import TelegramToken
-Msg_prefix = "ATAG Q15S 01 "
+Msg_prefix = "ATAG Q15S 02 "
 Token = TelegramToken
 
 firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
