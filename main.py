@@ -4,7 +4,7 @@
 
 ### Config your stuff here
 from WIFI_CONFIG import TelegramToken
-
+Msg_prefix = "ATAG Q15S 01 "
 Token = TelegramToken
 
 firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
@@ -68,22 +68,22 @@ SevenSegDig = {
 }
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global LastTemperature, DisplayCurrent, LiveDisplay, Chat_id
+    global Msg_prefix, LastTemperature, DisplayCurrent, LiveDisplay, Chat_id
     print(msg_type,chat_name,sender_name,chat_id,text)
     Chat_id = chat_id
 
     if text == "/temp":
-        reply = "ATAG Q15S Temperature: " + LastTemperature
+        reply = Msg_prefix + "Temperature: " + LastTemperature
     elif text == "/ip":
-        reply = "ATAG Q15S Local IP: " + str(WlanIp)
+        reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
-        reply = "ATAG Q15S Display: " + DisplayCurrent
+        reply = Msg_prefix + "Display: " + DisplayCurrent
     elif text == "/livedisplayon":
         LiveDisplay = True
-        reply = "ATAG Q15S LiveDisplayOn"
+        reply = Msg_prefix + "LiveDisplayOn"
     elif text == "/livedisplayoff":
         LiveDisplay = False
-        reply = "ATAG Q15S LiveDisplayOff"
+        reply = Msg_prefix + "LiveDisplayOff"
     elif text == "/reset":
         reply = "Module reset!"
 #        sys.exit()
