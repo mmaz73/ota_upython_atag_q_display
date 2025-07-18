@@ -1,2 +1,2 @@
-# ota_test
-OTA Test
+# ATAG Q Series Display hacking
+OTA FW repo
