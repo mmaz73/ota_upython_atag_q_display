@@ -4,7 +4,7 @@
 
 ### Config your stuff here
 from WIFI_CONFIG import TelegramToken
-Msg_prefix = "ATAG Q15S 00 "
+Msg_prefix = "ATAG Q15S 01 "
 Token = TelegramToken
 
 firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
@@ -70,14 +70,14 @@ SevenSegDig = {
 }
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global Msg_prefix, LastTemperature, DisplayCurrent, LiveDisplayOn, Chat_id
+    global Msg_prefix, LastTemperature, LastPressure, DisplayCurrent, LiveDisplayOn, Chat_id
     print(msg_type,chat_name,sender_name,chat_id,text)
     Chat_id = chat_id
 
     if text == "/temp":
         reply = Msg_prefix + "Temperature: " + LastTemperature + "°C"
-    if text == "/pressure":
-        reply = Msg_prefix + "Pressure: " + LastPressure + "Bar"
+    elif text == "/pressure":
+        reply = Msg_prefix + "Pressure: " + LastPressure + " Bar"
     elif text == "/ip":
         reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
@@ -161,7 +161,7 @@ sm3.active(1)
 ############################
     
 async def ReadFifoSM():
-  global Repeat, State, LastTemperature, DisplayCurrent
+  global Repeat, State, LastTemperature, LastPressure, DisplayCurrent
 
   while True:
      if sm3.rx_fifo()>0:
