@@ -196,12 +196,14 @@ async def ReadFifoSM():
 async def LiveDisplay():
   global DisplayCurrent, DisplayOld, LiveDisplayOn, Chat_id, Msg_prefix
 
-  if DisplayOld != DisplayCurrent:
-     DisplayOld = DisplayCurrent
-     if (LiveDisplayOn == True) and (Chat_id != None):
-        reply = Msg_prefix + "Display: " + DisplayOld
-        bot.send(Chat_id,reply)
-  await asyncio.sleep(0.2)
+  while True:
+
+     if DisplayOld != DisplayCurrent:
+        DisplayOld = DisplayCurrent
+        if (LiveDisplayOn == True) and (Chat_id != None):
+           reply = Msg_prefix + "Display: " + DisplayOld
+           bot.send(Chat_id,reply)
+     await asyncio.sleep(0.2)
 
 ############################
 # Main program
