@@ -93,7 +93,7 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         
         ota_updater.download_and_install_update_if_available()
     else:
-        reply = "ATAG Q15S Display: " + DisplayCurrent
+        reply = Msg_prefix + "Display: " + DisplayCurrent
     
     bot.send(chat_id,reply)
 
@@ -189,7 +189,7 @@ async def ReadFifoSM():
                if DisplayNew != DisplayCurrent:
                   DisplayCurrent = DisplayNew
                   if (LiveDisplay == True) and (Chat_id != None):
-                     reply = "ATAG Q15S Display: " + DisplayCurrent
+                     reply = Msg_prefix + "Display: " + DisplayCurrent
                      bot.send(Chat_id,reply)
                else:
                   await asyncio.sleep(0.001)
