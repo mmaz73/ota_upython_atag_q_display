@@ -32,6 +32,7 @@ DisplayOld = DisplayCurrent
 LiveDisplayOn = False
 Chat_id = None
 LastTemperature = "NA"
+LastPressure = "0.0"
 WlanIp = "0.0.0.0"
 
 SevenSegDig = {
@@ -74,7 +75,9 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     Chat_id = chat_id
 
     if text == "/temp":
-        reply = Msg_prefix + "Temperature: " + LastTemperature
+        reply = Msg_prefix + "Temperature: " + LastTemperature + "°C"
+    if text == "/pressure":
+        reply = Msg_prefix + "Pressure: " + LastPressure + "Bar"
     elif text == "/ip":
         reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
@@ -188,7 +191,9 @@ async def ReadFifoSM():
                Digit3 = data & 0x7F
                DisplayCurrent = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
                await asyncio.sleep(0.01)
-               if SevenSegDig.get(Digit0,"X") != "P":
+               if SevenSegDig.get(Digit0,"X") == "P":
+                  LastPressure = SevenSegDig.get(Digit2,"X") + "." + SevenSegDig.get(Digit3,"X")
+               else:
                   LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
      else:
        await asyncio.sleep(0.001)
