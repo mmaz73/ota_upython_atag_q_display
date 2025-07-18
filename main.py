@@ -28,7 +28,8 @@ EV1_PIN = Pin(19, Pin.OUT)
 SAA1064 = 0x70
 
 DisplayCurrent = "P 19"
-LiveDisplay = False
+DisplayOld = DisplayCurrent
+LiveDisplayOn = False
 Chat_id = None
 LastTemperature = "NA"
 WlanIp = "0.0.0.0"
@@ -68,7 +69,7 @@ SevenSegDig = {
 }
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global Msg_prefix, LastTemperature, DisplayCurrent, LiveDisplay, Chat_id
+    global Msg_prefix, LastTemperature, DisplayCurrent, LiveDisplayOn, Chat_id
     print(msg_type,chat_name,sender_name,chat_id,text)
     Chat_id = chat_id
 
@@ -79,10 +80,10 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     elif text == "/display":
         reply = Msg_prefix + "Display: " + DisplayCurrent
     elif text == "/livedisplayon":
-        LiveDisplay = True
+        LiveDisplayOn = True
         reply = Msg_prefix + "LiveDisplayOn"
     elif text == "/livedisplayoff":
-        LiveDisplay = False
+        LiveDisplayOn = False
         reply = Msg_prefix + "LiveDisplayOff"
     elif text == "/reset":
         reply = "Module reset!"
@@ -157,7 +158,7 @@ sm3.active(1)
 ############################
     
 async def ReadFifoSM():
-  global Repeat, State, LastTemperature, DisplayCurrent, Chat_id, LiveDisplay
+  global Repeat, State, LastTemperature, DisplayCurrent
 
   while True:
      if sm3.rx_fifo()>0:
@@ -185,18 +186,23 @@ async def ReadFifoSM():
         elif  State == "D4":
                State = "Idle"
                Digit3 = data & 0x7F
-               DisplayNew = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
-               if DisplayNew != DisplayCurrent:
-                  DisplayCurrent = DisplayNew
-                  if (LiveDisplay == True) and (Chat_id != None):
-                     reply = Msg_prefix + "Display: " + DisplayCurrent
-                     bot.send(Chat_id,reply)
-               else:
-                  await asyncio.sleep(0.001)
+               DisplayCurrent = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
+               await asyncio.sleep(0.01)
                if SevenSegDig.get(Digit0,"X") != "P":
                   LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
      else:
        await asyncio.sleep(0.001)
+
+async def LiveDisplay():
+  global DisplayCurrent, DisplayOld, LiveDisplayOn, Chat_id, Msg_prefix
+
+  if DisplayOld != DisplayCurrent:
+        DisplayOld = DisplayCurrent
+       if (LiveDisplayOn == True) and (Chat_id != None):
+          reply = Msg_prefix + "Display: " + DisplayOld
+          bot.send(Chat_id,reply)
+     await asyncio.sleep(0.1)
+
 ############################
 # Main program
 ############################
