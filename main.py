@@ -191,7 +191,7 @@ async def ReadFifoSM():
                Digit3 = data & 0x7F
                #Discard noisy readings
                RawDisplay = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
-               if "X" not in RawDisplay:
+               if not any(elem in "XU" for elem in RawDisplay):
                  DisplayCurrent = RawDisplay
                  await asyncio.sleep(0.02)
                  if DisplayCurrent[0] == "P":
