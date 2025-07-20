@@ -192,8 +192,8 @@ async def ReadFifoSM():
                #Discard noisy readings
                RawDisplay = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
                if "X" not in RawDisplay:
-                 await asyncio.sleep(0.01)
                  DisplayCurrent = RawDisplay
+                 await asyncio.sleep(0.02)
                  if DisplayCurrent[0] == "P":
                     LastPressure = DisplayCurrent[2] + "." + DisplayCurrent[3]
                  else:
