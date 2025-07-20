@@ -189,14 +189,19 @@ async def ReadFifoSM():
         elif  State == "D4":
                State = "Idle"
                Digit3 = data & 0x7F
-               DisplayCurrent = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
-#               await asyncio.sleep(0.01)
-               if SevenSegDig.get(Digit0,"X") == "P":
-                  LastPressure = SevenSegDig.get(Digit2,"X") + "." + SevenSegDig.get(Digit3,"X")
+               #Discard noisy readings
+               RawDisplay = SevenSegDig.get(Digit0,"X") + SevenSegDig.get(Digit1,"X") + SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
+               if "X" not in RawDisplay:
+                 await asyncio.sleep(0.1)
+                 DisplayCurrent = RawDisplay
+                 if DisplayCurrent[0] == "P":
+                    LastPressure = DisplayCurrent[2] + "." + DisplayCurrent[3]
+                 else:
+                    LastTemperature = DisplayCurrent[2] + DisplayCurrent[3]
                else:
-                  LastTemperature = SevenSegDig.get(Digit2,"X") + SevenSegDig.get(Digit3,"X")
+                 await asyncio.sleep(0.1)
      else:
-       await asyncio.sleep(0.01)
+       await asyncio.sleep(0.05)
 
 async def LiveDisplay():
   global DisplayCurrent, DisplayOld, LiveDisplayOn, Chat_id, Msg_prefix
