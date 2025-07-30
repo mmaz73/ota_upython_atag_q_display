@@ -21,6 +21,9 @@ from machine import Pin, PWM
 import rp2
 from rp2 import PIO
 
+from machine import WDT
+wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
+
 SDA_PIN = Pin(16, Pin.IN)
 SCL_PIN = Pin(17, Pin.IN)
 EV0_PIN = Pin(18, Pin.OUT)
@@ -202,6 +205,8 @@ async def ReadFifoSM():
                  await asyncio.sleep(0.1)
      else:
        await asyncio.sleep(0.01)
+       # Feed watchdog to avoid deadlocks
+       wdt.feed()
 
 async def LiveDisplay():
   global DisplayCurrent, DisplayOld, LiveDisplayOn, Chat_id, Msg_prefix
