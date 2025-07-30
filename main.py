@@ -33,8 +33,10 @@ SAA1064 = 0x70
 DisplayCurrent = "P 19"
 DisplayOld = DisplayCurrent
 LiveDisplayOn = False
+LiveTempOn = False
 Chat_id = None
-LastTemperature = "NA"
+TemperatureCurrent = "NA"
+TemperatureOld = TemperatureCurrent
 LastPressure = "0.0"
 WlanIp = "0.0.0.0"
 
@@ -73,12 +75,12 @@ SevenSegDig = {
 }
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global Msg_prefix, LastTemperature, LastPressure, DisplayCurrent, LiveDisplayOn, Chat_id
+    global Msg_prefix, TemperatureCurrent, LastPressure, DisplayCurrent, LiveDisplayOn, LiveTempOn, Chat_id
     print(msg_type,chat_name,sender_name,chat_id,text)
     Chat_id = chat_id
 
     if text == "/temp":
-        reply = Msg_prefix + "Temperature: " + LastTemperature + "°C"
+        reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
     elif text == "/pressure":
         reply = Msg_prefix + "Pressure: " + LastPressure + " Bar"
     elif text == "/ip":
@@ -91,6 +93,12 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     elif text == "/livedisplayoff":
         LiveDisplayOn = False
         reply = Msg_prefix + "LiveDisplayOff"
+    elif text == "/LiveTempOn":
+        LiveTempOn = True
+        reply = Msg_prefix + "LiveTempOn"
+    elif text == "/LiveTempOff":
+        LiveTempOn = False
+        reply = Msg_prefix + "LiveTempOff"
     elif text == "/reset":
         reply = "Module reset!"
 #        sys.exit()
@@ -164,7 +172,7 @@ sm3.active(1)
 ############################
     
 async def ReadFifoSM():
-  global Repeat, State, LastTemperature, LastPressure, DisplayCurrent
+  global Repeat, State, TemperatureCurrent, LastPressure, DisplayCurrent
 
   while True:
      if sm3.rx_fifo()>0:
@@ -200,7 +208,7 @@ async def ReadFifoSM():
                  if DisplayCurrent[0] == "P":
                     LastPressure = DisplayCurrent[2] + "." + DisplayCurrent[3]
                  else:
-                    LastTemperature = DisplayCurrent[2] + DisplayCurrent[3]
+                    TemperatureCurrent = DisplayCurrent[2] + DisplayCurrent[3]
                else:
                  await asyncio.sleep(0.1)
      else:
@@ -209,15 +217,20 @@ async def ReadFifoSM():
        wdt.feed()
 
 async def LiveDisplay():
-  global DisplayCurrent, DisplayOld, LiveDisplayOn, Chat_id, Msg_prefix
+  global DisplayCurrent, DisplayOld, LiveDisplayOn, LiveTempOn, Chat_id, Msg_prefix
 
   while True:
-
      if DisplayOld != DisplayCurrent:
         DisplayOld = DisplayCurrent
         if (LiveDisplayOn == True) and (Chat_id != None):
            reply = Msg_prefix + "Display: " + DisplayOld
            bot.send(Chat_id,reply)
+     elif TemperatureOld != TemperatureCurrent:
+        TemperatureOld = TemperatureCurrent
+        if (LiveTempOn == True) and (Chat_id != None):
+           reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
+           bot.send(Chat_id,reply)
+
      await asyncio.sleep(0.2)
 
 ############################
