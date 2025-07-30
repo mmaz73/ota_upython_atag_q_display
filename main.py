@@ -217,7 +217,7 @@ async def ReadFifoSM():
        wdt.feed()
 
 async def LiveDisplay():
-  global DisplayCurrent, DisplayOld, LiveDisplayOn, LiveTempOn, Chat_id, Msg_prefix
+  global DisplayCurrent, DisplayOld, TemperatureCurrent, TemperatureOld, LiveDisplayOn, LiveTempOn, Chat_id, Msg_prefix
 
   while True:
      if DisplayOld != DisplayCurrent:
