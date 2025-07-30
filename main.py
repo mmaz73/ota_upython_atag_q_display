@@ -93,10 +93,10 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     elif text == "/livedisplayoff":
         LiveDisplayOn = False
         reply = Msg_prefix + "LiveDisplayOff"
-    elif text == "/LiveTempOn":
+    elif text == "/livetempon":
         LiveTempOn = True
         reply = Msg_prefix + "LiveTempOn"
-    elif text == "/LiveTempOff":
+    elif text == "/livetempoff":
         LiveTempOn = False
         reply = Msg_prefix + "LiveTempOff"
     elif text == "/reset":
