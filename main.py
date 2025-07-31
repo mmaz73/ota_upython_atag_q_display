@@ -225,11 +225,11 @@ async def LiveDisplay():
         if (LiveDisplayOn == True) and (Chat_id != None):
            reply = Msg_prefix + "Display: " + DisplayOld
            bot.send(Chat_id,reply)
-     elif TemperatureOld != TemperatureCurrent:
-        TemperatureOld = TemperatureCurrent
-        if (LiveTempOn == True) and (Chat_id != None):
-           reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
-           bot.send(Chat_id,reply)
+        if TemperatureOld != TemperatureCurrent:
+           TemperatureOld = TemperatureCurrent
+           if (LiveTempOn == True) and (Chat_id != None):
+              reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
+              bot.send(Chat_id,reply)
 
      await asyncio.sleep(0.2)
 
