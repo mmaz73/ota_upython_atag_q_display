@@ -3,7 +3,9 @@
 # 
 
 ### Config your stuff here
-from WIFI_CONFIG import TelegramToken
+from PLAT_CONFIG import TelegramToken
+from PLAT_CONFIG import WDT_ENABLED
+
 Msg_prefix = "ATAG Q15S 01 "
 Token = TelegramToken
 
@@ -22,7 +24,10 @@ import rp2
 from rp2 import PIO
 
 from machine import WDT
-wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
+if WDT_ENABLED:
+  wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
+
+from boot import WL
 
 SDA_PIN = Pin(16, Pin.IN)
 SCL_PIN = Pin(17, Pin.IN)
@@ -214,7 +219,9 @@ async def ReadFifoSM():
      else:
        await asyncio.sleep(0.01)
        # Feed watchdog to avoid deadlocks
-       wdt.feed()
+       if WDT_ENABLED:
+         if WL.isconnected():
+           wdt.feed()
 
 async def LiveDisplay():
   global DisplayCurrent, DisplayOld, TemperatureCurrent, TemperatureOld, LiveDisplayOn, LiveTempOn, Chat_id, Msg_prefix
@@ -250,6 +257,4 @@ asyncio.create_task(LiveDisplay())
 
 loop = asyncio.get_event_loop()
 loop.run_forever()
-
-
 
