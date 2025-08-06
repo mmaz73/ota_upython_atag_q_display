@@ -3,8 +3,7 @@
 # 
 
 ### Config your stuff here
-from PLAT_CONFIG import TelegramToken
-from PLAT_CONFIG import WDT_ENABLED
+from PLAT_CONFIG import TelegramToken, WDT_ENABLED, WL_SSID, WL_PW
 
 Msg_prefix = "ATAG Q15S 01 "
 Token = TelegramToken
@@ -13,6 +12,7 @@ firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
 
 ###
 
+import network
 import uasyncio as asyncio
 from telegram import TelegramBot
 from ota import OTAUpdater
@@ -25,9 +25,10 @@ from rp2 import PIO
 
 from machine import WDT
 if WDT_ENABLED:
+  print("Watchdog enabled in PLAT_CONFIG!")
   wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
 
-from boot import WL
+#from boot import WL
 
 SDA_PIN = Pin(16, Pin.IN)
 SCL_PIN = Pin(17, Pin.IN)
@@ -249,6 +250,19 @@ print("Starting Telegram sniff I2C")
 # Set initial State
 State = "Idle"
 
+# Connect wifi
+
+WL = network.WLAN(network.STA_IF)
+
+if not WL.isconnected():
+    print('connecting to network...')
+    WL.active(True)
+    WL.connect(WL_SSID, WL_PW)
+    while not WL.isconnected():
+        pass
+
+print('network config:', WL.ifconfig())
+
 bot = TelegramBot(Token,mycallback)
 
 asyncio.create_task(bot.run())
@@ -257,4 +271,5 @@ asyncio.create_task(LiveDisplay())
 
 loop = asyncio.get_event_loop()
 loop.run_forever()
+
 
