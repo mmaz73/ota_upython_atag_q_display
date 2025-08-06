@@ -24,9 +24,6 @@ import rp2
 from rp2 import PIO
 
 from machine import WDT
-if WDT_ENABLED:
-  print("Watchdog enabled in PLAT_CONFIG!")
-  wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
 
 #from boot import WL
 
@@ -247,6 +244,9 @@ async def LiveDisplay():
 
 print("Starting Telegram sniff I2C")
 
+led = Pin("LED", Pin.OUT)
+led.high()
+
 # Set initial State
 State = "Idle"
 
@@ -261,7 +261,13 @@ if not WL.isconnected():
     while not WL.isconnected():
         pass
 
+led.toggle()
+
 print('network config:', WL.ifconfig())
+
+if WDT_ENABLED:
+  print("Watchdog enabled in PLAT_CONFIG!")
+  wdt = WDT(timeout=8000)  # enable it with a timeout of 8s
 
 bot = TelegramBot(Token,mycallback)
 
