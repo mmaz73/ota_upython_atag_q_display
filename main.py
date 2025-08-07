@@ -12,7 +12,7 @@ firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
 
 ###
 
-import network
+import machine, network
 import uasyncio as asyncio
 from telegram import TelegramBot
 from ota import OTAUpdater
@@ -259,7 +259,7 @@ if not WL.isconnected():
     WL.active(True)
     WL.connect(WL_SSID, WL_PW)
     while not WL.isconnected():
-        pass
+        machine.idle()
     WlanIp = WL.ipconfig('addr4') 
 
 led.toggle()
