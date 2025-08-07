@@ -260,6 +260,7 @@ if not WL.isconnected():
     WL.connect(WL_SSID, WL_PW)
     while not WL.isconnected():
         pass
+    WlanIp = WL.ipconfig('addr4') 
 
 led.toggle()
 
