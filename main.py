@@ -104,7 +104,7 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = Msg_prefix + "LiveTempOff"
     elif text == "/reset":
         reply = "Module reset!"
-#        sys.exit()
+        machine.reset()
     elif text == "/otaupdate":
         reply = "Checking for update!"
         ota_updater = OTAUpdater(firmware_url, "main.py")
