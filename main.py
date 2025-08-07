@@ -18,7 +18,6 @@ from telegram import TelegramBot
 from ota import OTAUpdater
 
 import sys
-import time
 from machine import Pin, PWM
 import rp2
 from rp2 import PIO
