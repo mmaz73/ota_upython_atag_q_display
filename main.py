@@ -12,7 +12,7 @@ firmware_url = "https://github.com/mmaz73/ota_upython_atag_q_display/"
 
 ###
 
-import machine, network
+import machine, network, time
 import uasyncio as asyncio
 from telegram import TelegramBot
 from ota import OTAUpdater
@@ -86,6 +86,8 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
     elif text == "/pressure":
         reply = Msg_prefix + "Pressure: " + LastPressure + " Bar"
+    elif text == "/time":
+        reply = Msg_prefix + "Passsed seconds from Epoch: " + time.time()
     elif text == "/ip":
         reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
