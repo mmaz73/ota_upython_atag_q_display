@@ -18,6 +18,7 @@ from telegram import TelegramBot
 from ota import OTAUpdater
 
 import sys
+import time
 from machine import Pin, PWM
 import rp2
 from rp2 import PIO
@@ -86,7 +87,7 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     elif text == "/pressure":
         reply = Msg_prefix + "Pressure: " + LastPressure + " Bar"
     elif text == "/time":
-        reply = Msg_prefix + "Passsed seconds from Epoch: " + time.time()
+        reply = Msg_prefix + "Passsed seconds from Epoch: " + str(time.time())
     elif text == "/ip":
         reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
@@ -261,11 +262,12 @@ if not WL.isconnected():
     WL.connect(WL_SSID, WL_PW)
     while not WL.isconnected():
         machine.idle()
-    WlanIp = WL.ipconfig('addr4') 
 
 led.toggle()
 
-print('network config:', WL.ifconfig())
+WlanIp = WL.ipconfig('addr4') 
+
+print('network config:', WlanIp)
 
 if WDT_ENABLED:
   print("Watchdog enabled in PLAT_CONFIG!")
@@ -279,5 +281,6 @@ asyncio.create_task(LiveDisplay())
 
 loop = asyncio.get_event_loop()
 loop.run_forever()
+
 
 
