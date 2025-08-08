@@ -83,7 +83,7 @@ def UpdateUpTime(self):
     (minutes, seconds) = divmod(timeDiff, 60)  
     (hours, minutes) = divmod(minutes, 60)  
     (days,hours) = divmod(hours, 24)
-    UpTime = print(str(days)+":"+f"{hours:02d}"+":"+f"{minutes:02d}"+":"+f"{seconds:02d}")
+    UpTime = str(days)+":"+f"{hours:02d}"+":"+f"{minutes:02d}"+":"+f"{seconds:02d}"
 
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
     global Msg_prefix, TemperatureCurrent, LastPressure, DisplayCurrent, LiveDisplayOn, LiveTempOn, Chat_id, UpTime
