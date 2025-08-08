@@ -24,7 +24,8 @@ from rp2 import PIO
 
 from machine import WDT
 
-#from boot import WL
+timeInit = time.time()
+UpTime = "0:00:00:00"
 
 SDA_PIN = Pin(16, Pin.IN)
 SCL_PIN = Pin(17, Pin.IN)
@@ -76,8 +77,16 @@ SevenSegDig = {
   0x6E: "Y"
 }
 
+def UpdateUpTime(self):
+    global UpTime, timeInit
+    timeDiff = time.time()-timeInit  
+    (minutes, seconds) = divmod(timeDiff, 60)  
+    (hours, minutes) = divmod(minutes, 60)  
+    (days,hours) = divmod(hours, 24)
+    UpTime = print(str(days)+":"+f"{hours:02d}"+":"+f"{minutes:02d}"+":"+f"{seconds:02d}")
+
 def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
-    global Msg_prefix, TemperatureCurrent, LastPressure, DisplayCurrent, LiveDisplayOn, LiveTempOn, Chat_id
+    global Msg_prefix, TemperatureCurrent, LastPressure, DisplayCurrent, LiveDisplayOn, LiveTempOn, Chat_id, UpTime
     print(msg_type,chat_name,sender_name,chat_id,text)
     Chat_id = chat_id
 
@@ -85,8 +94,9 @@ def mycallback(bot,msg_type,chat_name,sender_name,chat_id,text,entry):
         reply = Msg_prefix + "Temperature: " + TemperatureCurrent + "°C"
     elif text == "/pressure":
         reply = Msg_prefix + "Pressure: " + LastPressure + " Bar"
-    elif text == "/time":
-        reply = Msg_prefix + "Passsed seconds from Epoch: " + str(time.time())
+    elif text == "/uptime":
+        UpdateUpTime()
+        reply = Msg_prefix + "Elapsed time from last boot: " + UpTime
     elif text == "/ip":
         reply = Msg_prefix + "Local IP: " + str(WlanIp)
     elif text == "/display":
