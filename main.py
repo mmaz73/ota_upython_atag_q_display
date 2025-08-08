@@ -77,7 +77,7 @@ SevenSegDig = {
   0x6E: "Y"
 }
 
-def UpdateUpTime(self):
+def UpdateUpTime():
     global UpTime, timeInit
     timeDiff = time.time()-timeInit  
     (minutes, seconds) = divmod(timeDiff, 60)  
