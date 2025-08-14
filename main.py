@@ -274,10 +274,6 @@ if not WL.isconnected():
     while (not WL.isconnected()) and (attempts < MAX_RETRIES ):
       time.sleep(0.1)
       attempts += 1
-    if not WL.isconnected():
-      wdt = WDT(timeout=1000)  # enable it with a timeout of 1s
-
-      
 
 led.toggle()
 
